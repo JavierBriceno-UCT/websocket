@@ -1,12 +1,22 @@
 const express = require("express");
 const socket = require("socket.io");
+const fs = require('fs')
+const https = require('https')
+
+var privateKey = fs.readFileSync( './certs/private.key' );
+var certificate = fs.readFileSync( './certs/server.crt' );
+
+var options = {
+  key: privateKey,
+  cert: certificate,
+};
 
 // App setup
 const PORT = 5000;
 const app = express();
-const server = app.listen(PORT, function () {
+const server = https.createServer(options, app).listen(PORT, function () {
   console.log(`Listening on port ${PORT}`);
-  console.log(`http://localhost:${PORT}`);
+  console.log(`https://localhost:${PORT}`);
 });
 
 // Static files
